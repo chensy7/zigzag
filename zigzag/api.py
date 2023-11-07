@@ -4,6 +4,7 @@ import re
 
 def get_hardware_performance_zigzag(
     workload,
+    precision,
     accelerator,
     mapping,
     opt="latency",
@@ -59,6 +60,7 @@ def get_hardware_performance_zigzag(
         accelerator=accelerator,  # required by AcceleratorParserStage
         workload=workload,  # required by workload_parser_stage
         mapping=mapping,  # required by workload_parser_stage
+        precision=precision,  # required by workload_parser_stage
         dump_filename_pattern=dump_filename_pattern,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
@@ -154,9 +156,9 @@ def get_hardware_performance_zigzag_pe_array_scaling(
 
     return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
 
-
 def get_hardware_performance_zigzag_without_unused_memory(
     workload,
+    precision,
     accelerator,
     mapping,
     opt="latency",
@@ -214,6 +216,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
         accelerator=accelerator,  # required by AcceleratorParserStage
         workload=workload,  # required by workload_parser_stage
         mapping=mapping,  # required by workload_parser_stage
+        precision=precision,  # required by workload_parser_stage
         dump_filename_pattern=dump_filename_pattern,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage

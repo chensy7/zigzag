@@ -10,9 +10,9 @@ logger = logging.getLogger(__name__)
 
 ## Description missing
 class ONNXModelParserStage(Stage):
-    def __init__(self, list_of_callables, *, workload, mapping, **kwargs):
+    def __init__(self, list_of_callables, *, workload, mapping, precision, **kwargs):
         super().__init__(list_of_callables, **kwargs)
-        self.onnx_model_parser = ONNXModelParser(workload, mapping)
+        self.onnx_model_parser = ONNXModelParser(workload, mapping, precision)
 
     def run(self) -> Generator:
         self.onnx_model_parser.run()

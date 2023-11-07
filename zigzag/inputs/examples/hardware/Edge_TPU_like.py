@@ -60,11 +60,11 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
 
     sram_2M_with_16_128K_bank_128_1r_1w = MemoryInstance(
         name="sram_2MB",
-        size=131072 * 16 * 8,
+        size=131072 * 16 * 8 ,
         r_bw=128 * 16,
         w_bw=128 * 16,
-        r_cost=26.01 * 16,
-        w_cost=23.65 * 16,
+        r_cost=26.01 * 16 ,
+        w_cost=23.65 * 16 ,
         area=0,
         r_port=1,
         w_port=1,
@@ -108,6 +108,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
         served_dimensions={(0, 0, 1, 0), (0, 0, 0, 1)},
     )
+
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_O1,
         operands=("O",),

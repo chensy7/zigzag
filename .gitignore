@@ -143,6 +143,7 @@ outputs*/*.json
 # result png files
 outputs*/*.png
 
+summary/*
 
 # docs makefile and make.bat
 docs/Makefile

@@ -9,7 +9,7 @@ from zigzag.classes.hardware.architecture.core import Core
 
 def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
     """Memory hierarchy variables"""
-    """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy) """
+    """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write word energy) """
     rf1 = MemoryInstance(
         name="rf_64B",
         size=512,
@@ -181,7 +181,8 @@ def multiplier_array_latency_test1():
     multiplier_input_precision = [8, 8]
     multiplier_energy = 0.5
     multiplier_area = 0.1
-    dimensions = {"D1": 14, "D2": 12}
+    # dimensions = {"D1": 14, "D2": 12}
+    dimensions = {"D1": 168}
     multiplier = Multiplier(
         multiplier_input_precision, multiplier_energy, multiplier_area
     )
