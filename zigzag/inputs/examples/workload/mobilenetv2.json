@@ -1,0 +1,320 @@
+{
+    "LayerNode_0": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_4": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_8": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_9": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_13": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_17": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_18": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_22": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_26": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_28": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_32": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_36": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_37": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_41": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_45": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_47": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_51": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_55": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_57": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_61": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_65": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_66": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_70": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_74": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_76": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_80": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_84": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_86": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_90": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_94": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_96": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_100": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_104": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_105": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_109": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_113": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_115": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_119": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_123": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_125": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_129": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_133": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_134": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_138": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_142": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_144": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_148": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_152": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_154": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_158": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_162": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_163": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    },
+    "LayerNode_169": {
+        "O": 16,
+        "O_final": 8,
+        "W": 8,
+        "I": 8
+    }
+}

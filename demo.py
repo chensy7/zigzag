@@ -6,6 +6,7 @@ opt = 'EDP'
 model = "mobilenetv2"
 onnx_model_path = f"zigzag/inputs/examples/workload/{model}.onnx"
 workload = onnx_model_path
+precision = f"zigzag/inputs/examples/workload/{model}.json"
 
 energies_all = {}
 latecies_all = {}
@@ -14,13 +15,14 @@ latency_dict = {}
 
 # for hwarch in ["Edge_TPU", "Tesla_NPU", "Meta_prototype", "TPU", "Ascend"]:
 for hwarch in ["Edge_TPU_like"]:
-    mapping = f"zigzag.inputs.examples.mapping.Edge_TPU_like"
+    mapping = f"zigzag.inputs.examples.mapping.default"
     accelerator = f"zigzag.inputs.examples.hardware.{hwarch}"
 
     dump_filename_pattern=f"outputs/{hwarch}-{model}-layer_?.json"
     pickle_filename = f"outputs/{hwarch}-{model}-saved_list_of_cmes.pickle"
 
     energy, latency, cme = get_hardware_performance_zigzag(workload=workload,
+                                                           precision=precision,
                                                            accelerator=accelerator,
                                                            mapping=mapping,
                                                            opt=opt,

@@ -4,7 +4,7 @@ import os
 import numpy as np
 import pickle
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.inputs.examples.hardware.Template_2L import cores_dut
+from zigzag.inputs.examples.hardware.Template_4L import cores_dut
 
 import argparse
 
@@ -24,8 +24,8 @@ parser.add_argument('--num_cpu', default=1, type=int)
 args = parser.parse_args()
 
 if not args.parse_output:
-    shutil.rmtree('summary'); os.mkdir("summary")
-    shutil.rmtree('outputs'); os.mkdir("outputs")
+    shutil.rmtree('summary_4L'); os.mkdir("summary_4L")
+    shutil.rmtree('outputs_4L'); os.mkdir("outputs_4L")
 
 opt = 'EDP'
 model = args.model
@@ -66,60 +66,60 @@ for (l1_w_s, l1_i_s, l1_o_s) in l1_size_multipliers:
                 l1_multipliers += [(l1_w_s, l1_i_s, l1_o_s, l1_w_bw, l1_i_bw, l1_o_bw)]
 
 # getting search space for regfile
-dimensions_mac = (32, 32)
-total_regfile_budget = 16 * 1024
-regfile_base_size_i_w = 8
-regfile_base_size_o = 16
-max_regfile_o_size_multiplier = total_regfile_budget // regfile_base_size_o // min(dimensions_mac)
-max_regfile_i_w_size_multiplier = total_regfile_budget // regfile_base_size_i_w // min(dimensions_mac)
-reg_size_multiplier_choices_o = np.append(np.flip(2**np.arange(np.log(max_regfile_o_size_multiplier)//np.log(2)+1)), 0)
-reg_size_multiplier_choices_i_w = np.append(np.flip(2**np.arange(np.log(max_regfile_i_w_size_multiplier)//np.log(2)+1)), 0)
-served_dim_list = [(0, 0), (1, 0), (0, 1)]
-reg_size_multipliers = []
-for idx_o_s, o_s in enumerate(reg_size_multiplier_choices_o):
-    for served_dim_o in served_dim_list:
-        if o_s == 0: 
-            served_dim_o = (-1, -1)
-        reg_o_size = regfile_base_size_o * o_s * dimensions_mac[0]**(1 - served_dim_o[0]) * dimensions_mac[1]**(1 - served_dim_o[1])
-        if reg_o_size > total_regfile_budget:
-            continue
-        for idx_i_s, i_s in enumerate(reg_size_multiplier_choices_i_w):
-            for served_dim_i in served_dim_list:
-                if i_s == 0: 
-                    served_dim_i = (-1, -1)
-                inst_cnt_i = dimensions_mac[0]**(1 - served_dim_i[0]) * dimensions_mac[1]**(1 - served_dim_i[1])
-                reg_i_size = regfile_base_size_i_w * i_s * inst_cnt_i
-                if reg_o_size + reg_i_size + regfile_base_size_i_w * min(dimensions_mac) <= total_regfile_budget:
-                    reg_w_size = (total_regfile_budget - reg_o_size - reg_i_size)
-                    for served_dim_w in served_dim_list:
-                        inst_cnt_w = dimensions_mac[0]**(1 - served_dim_w[0]) * dimensions_mac[1]**(1 - served_dim_w[1])
-                        if reg_w_size < inst_cnt_w * regfile_base_size_i_w:
-                            continue
-                        else:
-                            w_s = reg_w_size // (inst_cnt_w * regfile_base_size_i_w)
-                            reg_size_multipliers += [(int(o_s), served_dim_o, int(i_s), served_dim_i, int(w_s), served_dim_w)]
-                else:
-                    w_s = 0
-                    served_dim_w = (-1, -1)
-                    i_s = (total_regfile_budget - reg_o_size) // inst_cnt_i // regfile_base_size_i_w
-                    reg_size_multipliers += [(int(o_s), served_dim_o, int(i_s), served_dim_i, int(w_s), served_dim_w)]
-                if i_s == 0:
-                    break
-        if o_s == 0:
-            break
+# dimensions_mac = (8, 8, 4, 4)
+# total_regfile_budget = 16 * 1024
+# regfile_base_size_i_w = 8
+# regfile_base_size_o = 16
+# max_regfile_o_size_multiplier = total_regfile_budget // regfile_base_size_o // min(dimensions_mac)
+# max_regfile_i_w_size_multiplier = total_regfile_budget // regfile_base_size_i_w // min(dimensions_mac)
+# reg_size_multiplier_choices_o = np.append(np.flip(2**np.arange(np.log(max_regfile_o_size_multiplier)//np.log(2)+1)), 0)
+# reg_size_multiplier_choices_i_w = np.append(np.flip(2**np.arange(np.log(max_regfile_i_w_size_multiplier)//np.log(2)+1)), 0)
+# served_dim_list = [(0, 0, 0, 0), (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1)]
+# reg_size_multipliers = []
+# for idx_o_s, o_s in enumerate(reg_size_multiplier_choices_o):
+#     for served_dim_o in served_dim_list:
+#         if o_s == 0: 
+#             served_dim_o = (-1, -1)
+#         reg_o_size = regfile_base_size_o * o_s * dimensions_mac[0]**(1 - served_dim_o[0]) * dimensions_mac[1]**(1 - served_dim_o[1])
+#         if reg_o_size > total_regfile_budget:
+#             continue
+#         for idx_i_s, i_s in enumerate(reg_size_multiplier_choices_i_w):
+#             for served_dim_i in served_dim_list:
+#                 if i_s == 0: 
+#                     served_dim_i = (-1, -1)
+#                 inst_cnt_i = dimensions_mac[0]**(1 - served_dim_i[0]) * dimensions_mac[1]**(1 - served_dim_i[1])
+#                 reg_i_size = regfile_base_size_i_w * i_s * inst_cnt_i
+#                 if reg_o_size + reg_i_size + regfile_base_size_i_w * min(dimensions_mac) <= total_regfile_budget:
+#                     reg_w_size = (total_regfile_budget - reg_o_size - reg_i_size)
+#                     for served_dim_w in served_dim_list:
+#                         inst_cnt_w = dimensions_mac[0]**(1 - served_dim_w[0]) * dimensions_mac[1]**(1 - served_dim_w[1])
+#                         if reg_w_size < inst_cnt_w * regfile_base_size_i_w:
+#                             continue
+#                         else:
+#                             w_s = reg_w_size // (inst_cnt_w * regfile_base_size_i_w)
+#                             reg_size_multipliers += [(int(o_s), served_dim_o, int(i_s), served_dim_i, int(w_s), served_dim_w)]
+#                 else:
+#                     w_s = 0
+#                     served_dim_w = (-1, -1)
+#                     i_s = (total_regfile_budget - reg_o_size) // inst_cnt_i // regfile_base_size_i_w
+#                     reg_size_multipliers += [(int(o_s), served_dim_o, int(i_s), served_dim_i, int(w_s), served_dim_w)]
+#                 if i_s == 0:
+#                     break
+#         if o_s == 0:
+#             break
 
-reg_multipliers = []
-for idx, (o_s, _, i_s, _, w_s, _) in enumerate(reg_size_multipliers):
-    for w_bw in factorize(w_s):
-        for i_bw in factorize(i_s):
-            for o_bw in factorize(o_s):
-                reg_multipliers += [(*reg_size_multipliers[idx], o_bw, i_bw, w_bw)]
+# reg_multipliers = []
+# for idx, (o_s, _, i_s, _, w_s, _) in enumerate(reg_size_multipliers):
+#     for w_bw in factorize(w_s):
+#         for i_bw in factorize(i_s):
+#             for o_bw in factorize(o_s):
+#                 reg_multipliers += [(*reg_size_multipliers[idx], o_bw, i_bw, w_bw)]
 
 all_exploration_dicts = []
 idx = 0
-l1_multipliers = [l1_multipliers[93]]
+# l1_multipliers = [l1_multipliers[93]]
 # reg_multipliers = [reg_multipliers[42]]
-# reg_multipliers = [(0, 0, 0, 0, 0, 0, 0, 0, 0)]
+reg_multipliers = [(0, 0, 0, 0, 0, 0, 0, 0, 0)]
 for reg in reg_multipliers:
     for l1 in l1_multipliers:
         memory_hierarchy_exploration_dict = {}
@@ -142,7 +142,7 @@ for reg in reg_multipliers:
         idx += 1
         all_exploration_dicts += [memory_hierarchy_exploration_dict]
 
-hwarch = 'Template_2L'
+hwarch = 'Template_4L'
 mapping = f"zigzag.inputs.examples.mapping.default"
 accelerator = f"zigzag.inputs.examples.hardware.{hwarch}"
 

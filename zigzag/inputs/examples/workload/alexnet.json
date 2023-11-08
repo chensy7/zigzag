@@ -1,0 +1,50 @@
+{
+	"LayerNode_0": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	},
+	"LayerNode_4": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	},
+	"LayerNode_8": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	},
+	"LayerNode_10": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	},
+	"LayerNode_12": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	},
+	"LayerNode_16": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	},
+	"LayerNode_19": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	},
+	"LayerNode_22": {
+		"O": 16,
+		"O_final": 8,
+		"W": 8,
+		"I": 8
+	}
+}
