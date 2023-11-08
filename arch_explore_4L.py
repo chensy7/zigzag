@@ -118,6 +118,7 @@ for (l1_w_s, l1_i_s, l1_o_s) in l1_size_multipliers:
 all_exploration_dicts = []
 idx = 0
 # l1_multipliers = [l1_multipliers[93]]
+l1_multipliers = [(0, 0, 0, 0, 0, 0)]
 # reg_multipliers = [reg_multipliers[42]]
 reg_multipliers = [(0, 0, 0, 0, 0, 0, 0, 0, 0)]
 for reg in reg_multipliers:
@@ -154,7 +155,7 @@ def evaluate_single_mem_config(mem_dict):
     dump_filename_pattern=f"outputs/{hwarch}-mem{mem_dict['idx']}-{model}-layer_?.json"
     pickle_filename = f"outputs/{hwarch}-mem{mem_dict['idx']}-{model}-saved_list_of_cmes.pickle"
 
-    energy, latency, cme = get_hardware_performance_zigzag_without_unused_memory(workload=workload,
+    energy, latency, cme = get_hardware_performance_zigzag(workload=workload,
                                                            precision=precision,
                                                            accelerator=accelerator,
                                                            mapping=mapping,

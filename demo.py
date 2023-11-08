@@ -3,7 +3,7 @@ from zigzag.classes.io.accelerator.parser import AcceleratorParser
 import os
 
 opt = 'EDP'
-model = "mobilenetv2"
+model = "alexnet"
 onnx_model_path = f"zigzag/inputs/examples/workload/{model}.onnx"
 workload = onnx_model_path
 precision = f"zigzag/inputs/examples/workload/{model}.json"

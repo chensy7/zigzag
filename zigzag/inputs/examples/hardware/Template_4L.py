@@ -74,33 +74,33 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             latency=1,
         )
 
-    # reg_IW1 = MemoryInstance(
-    #     name="rf_1B",
-    #     size=8,
-    #     r_bw=8,
-    #     w_bw=8,
-    #     r_cost=0.01,
-    #     w_cost=0.01,
-    #     area=0,
-    #     r_port=1,
-    #     w_port=1,
-    #     rw_port=0,
-    #     latency=1,
-    # )
+    reg_IW1 = MemoryInstance(
+        name="rf_1B",
+        size=8,
+        r_bw=8,
+        w_bw=8,
+        r_cost=0.01,
+        w_cost=0.01,
+        area=0,
+        r_port=1,
+        w_port=1,
+        rw_port=0,
+        latency=1,
+    )
 
-    # reg_O1 = MemoryInstance(
-    #     name="rf_2B",
-    #     size=16,
-    #     r_bw=16,
-    #     w_bw=16,
-    #     r_cost=0.02,
-    #     w_cost=0.02,
-    #     area=0,
-    #     r_port=2,
-    #     w_port=2,
-    #     rw_port=0,
-    #     latency=1,
-    # )
+    reg_O1 = MemoryInstance(
+        name="rf_2B",
+        size=16,
+        r_bw=16,
+        w_bw=16,
+        r_cost=0.02,
+        w_cost=0.02,
+        area=0,
+        r_port=2,
+        w_port=2,
+        rw_port=0,
+        latency=1,
+    )
 
     ##################################### on-chip memory hierarchy building blocks #####################################
 
@@ -155,37 +155,37 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             min_w_granularity=8,
         )
 
-    # sram_32KB_512_1r_1w = MemoryInstance(
-    #     name="sram_32KB",
-    #     size=32768 * 8,
-    #     r_bw=512,
-    #     w_bw=512,
-    #     r_cost=22.9,
-    #     w_cost=52.01,
-    #     area=0,
-    #     r_port=1,
-    #     w_port=1,
-    #     rw_port=0,
-    #     latency=1,
-    #     min_r_granularity=64,
-    #     min_w_granularity=64,
-    # )
+    sram_32KB_512_1r_1w = MemoryInstance(
+        name="sram_32KB",
+        size=32768 * 8,
+        r_bw=512,
+        w_bw=512,
+        r_cost=22.9,
+        w_cost=52.01,
+        area=0,
+        r_port=1,
+        w_port=1,
+        rw_port=0,
+        latency=1,
+        min_r_granularity=64,
+        min_w_granularity=64,
+    )
 
-    # sram_2M_with_16_128K_bank_128_1r_1w = MemoryInstance(
-    #     name="sram_2MB",
-    #     size=131072 * 16 * 8 ,
-    #     r_bw=128 * 16,
-    #     w_bw=128 * 16,
-    #     r_cost=26.01 * 16 ,
-    #     w_cost=23.65 * 16 ,
-    #     area=0,
-    #     r_port=1,
-    #     w_port=1,
-    #     rw_port=0,
-    #     latency=1,
-    #     min_r_granularity=64,
-    #     min_w_granularity=64,
-    # )
+    sram_2M_with_16_128K_bank_128_1r_1w = MemoryInstance(
+        name="sram_2MB",
+        size=131072 * 16 * 8 ,
+        r_bw=128 * 16,
+        w_bw=128 * 16,
+        r_cost=26.01 * 16 ,
+        w_cost=23.65 * 16 ,
+        area=0,
+        r_port=1,
+        w_port=1,
+        rw_port=0,
+        latency=1,
+        min_r_granularity=64,
+        min_w_granularity=64,
+    )
 
     #######################################################################################################################
 
@@ -276,21 +276,21 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             served_dimensions="all",
         )
 
-    # memory_hierarchy_graph.add_memory(
-    #     memory_instance=sram_32KB_512_1r_1w,
-    #     operands=("I2",),
-    #     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-    #     served_dimensions="all",
-    # )
-    # memory_hierarchy_graph.add_memory(
-    #     memory_instance=sram_2M_with_16_128K_bank_128_1r_1w,
-    #     operands=("I1", "O"),
-    #     port_alloc=(
-    #         {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
-    #         {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
-    #     ),
-    #     served_dimensions="all",
-    # )
+    memory_hierarchy_graph.add_memory(
+        memory_instance=sram_32KB_512_1r_1w,
+        operands=("I2",),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+        served_dimensions="all",
+    )
+    memory_hierarchy_graph.add_memory(
+        memory_instance=sram_2M_with_16_128K_bank_128_1r_1w,
+        operands=("I1", "O"),
+        port_alloc=(
+            {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
+            {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
+        ),
+        served_dimensions="all",
+    )
 
     ####################################################################################################################
 
