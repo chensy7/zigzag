@@ -152,3 +152,6 @@ docs/make.bat
 
 # documentation output
 html/
+
+# debug file
+debug*
