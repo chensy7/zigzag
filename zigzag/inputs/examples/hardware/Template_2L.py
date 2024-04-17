@@ -28,6 +28,7 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
     L1_W_BW_MULTIPLIER = memory_hierarchy_exploration_dict['L1_W_BW_MULTIPLIER']
     L1_I_BW_MULTIPLIER = memory_hierarchy_exploration_dict['L1_I_BW_MULTIPLIER']
     L1_O_BW_MULTIPLIER = memory_hierarchy_exploration_dict['L1_O_BW_MULTIPLIER']
+    L1_SRAM_BASE_SIZE = memory_hierarchy_exploration_dict['L1_SRAM_BASE_SIZE']
 
     if REG_W_SIZE_MULTIPLIER != 0:
         reg_W = MemoryInstance(
@@ -35,8 +36,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             size=8 * REG_W_SIZE_MULTIPLIER,
             r_bw=8 * REG_W_BW_MULTIPLIER,
             w_bw=8 * REG_W_BW_MULTIPLIER,
-            r_cost=0.095 * REG_W_BW_MULTIPLIER,
-            w_cost=0.095 * REG_W_BW_MULTIPLIER,
+            r_cost=0 * REG_W_BW_MULTIPLIER,
+            w_cost=0 * REG_W_BW_MULTIPLIER,
             area=0,
             r_port=1,
             w_port=1,
@@ -50,8 +51,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             size=8 * REG_I_SIZE_MULTIPLIER,
             r_bw=8 * REG_I_BW_MULTIPLIER,
             w_bw=8 * REG_I_BW_MULTIPLIER,
-            r_cost=0.095 * REG_I_BW_MULTIPLIER,
-            w_cost=0.095 * REG_I_BW_MULTIPLIER,
+            r_cost=0 * REG_I_BW_MULTIPLIER,
+            w_cost=0 * REG_I_BW_MULTIPLIER,
             area=0,
             r_port=1,
             w_port=1,
@@ -65,8 +66,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             size=16 * REG_O_SIZE_MULTIPLIER,
             r_bw=16 * REG_O_BW_MULTIPLIER,
             w_bw=16 * REG_O_BW_MULTIPLIER,
-            r_cost=0.19 * REG_O_BW_MULTIPLIER,
-            w_cost=0.19 * REG_O_BW_MULTIPLIER,
+            r_cost=0 * REG_O_BW_MULTIPLIER,
+            w_cost=0 * REG_O_BW_MULTIPLIER,
             area=0,
             r_port=2,
             w_port=2,
@@ -107,15 +108,15 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
     if L1_W_SIZE_MULTIPLIER != 0:
         L1_W = MemoryInstance(
             name="L1_W",
-            size=8192 * 8 * L1_W_SIZE_MULTIPLIER,
-            r_bw=128 * L1_W_BW_MULTIPLIER,
-            w_bw=128 * L1_W_BW_MULTIPLIER,
-            r_cost=5.725 * L1_W_BW_MULTIPLIER,
-            w_cost=13 * L1_W_BW_MULTIPLIER,
+            size=L1_SRAM_BASE_SIZE * L1_W_SIZE_MULTIPLIER,
+            r_bw=32 * L1_W_BW_MULTIPLIER,
+            w_bw=32 * L1_W_BW_MULTIPLIER,
+            r_cost=5.9 * L1_W_BW_MULTIPLIER, # tsmc28 memory compiler for 2048x32
+            w_cost=5.9 * L1_W_BW_MULTIPLIER,
             area=0,
-            r_port=1,
-            w_port=1,
-            rw_port=0,
+            r_port=0,
+            w_port=0,
+            rw_port=1,
             latency=1,
             min_r_granularity=8,
             min_w_granularity=8,
@@ -124,15 +125,15 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
     if L1_I_SIZE_MULTIPLIER != 0:
         L1_I = MemoryInstance(
             name="L1_I",
-            size=8192 * 8 * L1_I_SIZE_MULTIPLIER,
-            r_bw=128 * L1_I_BW_MULTIPLIER,
-            w_bw=128 * L1_I_BW_MULTIPLIER,
-            r_cost=5.725 * L1_I_BW_MULTIPLIER,
-            w_cost=13 * L1_I_BW_MULTIPLIER,
+            size=L1_SRAM_BASE_SIZE * L1_I_SIZE_MULTIPLIER,
+            r_bw=32 * L1_I_BW_MULTIPLIER,
+            w_bw=32 * L1_I_BW_MULTIPLIER,
+            r_cost=5.9 * L1_I_BW_MULTIPLIER,
+            w_cost=5.9 * L1_I_BW_MULTIPLIER,
             area=0,
-            r_port=1,
-            w_port=1,
-            rw_port=0,
+            r_port=0,
+            w_port=0,
+            rw_port=1,
             latency=1,
             min_r_granularity=8,
             min_w_granularity=8,
@@ -141,15 +142,15 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
     if L1_O_SIZE_MULTIPLIER != 0:
         L1_O = MemoryInstance(
             name="L1_O",
-            size=8192 * 8 * L1_O_SIZE_MULTIPLIER,
-            r_bw=128 * L1_O_BW_MULTIPLIER,
-            w_bw=128 * L1_O_BW_MULTIPLIER,
-            r_cost=5.725 * L1_O_BW_MULTIPLIER,
-            w_cost=13 * L1_O_BW_MULTIPLIER,
+            size=L1_SRAM_BASE_SIZE * L1_O_SIZE_MULTIPLIER,
+            r_bw=32 * L1_O_BW_MULTIPLIER,
+            w_bw=32 * L1_O_BW_MULTIPLIER,
+            r_cost=5.9 * L1_O_BW_MULTIPLIER,
+            w_cost=5.9 * L1_O_BW_MULTIPLIER,
             area=0,
-            r_port=1,
-            w_port=1,
-            rw_port=0,
+            r_port=0,
+            w_port=0,
+            rw_port=1,
             latency=1,
             min_r_granularity=8,
             min_w_granularity=8,
@@ -176,10 +177,10 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
     dram = MemoryInstance(
         name="dram",
         size=10000000000,
-        r_bw=64,
-        w_bw=64,
-        r_cost=700,
-        w_cost=750,
+        r_bw=128,
+        w_bw=128,
+        r_cost=1280, #assume 10 pJ/bit
+        w_cost=1280,
         area=0,
         r_port=0,
         w_port=0,
@@ -239,7 +240,7 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
         memory_hierarchy_graph.add_memory(
             memory_instance=L1_I,
             operands=("I1",),
-            port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+            port_alloc=({"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},),
             served_dimensions="all",
         )
 
@@ -247,7 +248,7 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
         memory_hierarchy_graph.add_memory(
             memory_instance=L1_W,
             operands=("I2",),
-            port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+            port_alloc=({"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},),
             served_dimensions="all",
         )
 
@@ -255,7 +256,7 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
         memory_hierarchy_graph.add_memory(
             memory_instance=L1_O,
             operands=("O",),
-            port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},),
+            port_alloc=({"fh": "rw_port_1", "tl": "rw_port_1", "fl": "rw_port_1", "th": "rw_port_1"},),
             served_dimensions="all",
         )
 
@@ -297,8 +298,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
 
 def multiplier_array_dut():
     """Multiplier array variables"""
-    multiplier_input_precision = [16, 16]
-    multiplier_energy = 0.04
+    multiplier_input_precision = [8, 8]
+    multiplier_energy = 0.012 # scaled from isscc14 horowitz
     multiplier_area = 1
     dimensions = {"D1": 32, "D2": 32}  # {'D1': ('K', 32), 'D2': ('C', 32)}
 
