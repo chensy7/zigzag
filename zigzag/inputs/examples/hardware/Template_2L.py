@@ -104,15 +104,15 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
     # )
 
     ##################################### on-chip memory hierarchy building blocks #####################################
-
+    SRAM_ENERGY_32b = 5.9
     if L1_W_SIZE_MULTIPLIER != 0:
         L1_W = MemoryInstance(
             name="L1_W",
             size=L1_SRAM_BASE_SIZE * L1_W_SIZE_MULTIPLIER,
             r_bw=32 * L1_W_BW_MULTIPLIER,
             w_bw=32 * L1_W_BW_MULTIPLIER,
-            r_cost=5.9 * L1_W_BW_MULTIPLIER, # tsmc28 memory compiler for 2048x32
-            w_cost=5.9 * L1_W_BW_MULTIPLIER,
+            r_cost=SRAM_ENERGY_32b * L1_W_BW_MULTIPLIER, # tsmc28 memory compiler for 2048x32
+            w_cost=SRAM_ENERGY_32b * L1_W_BW_MULTIPLIER,
             area=0,
             r_port=0,
             w_port=0,
@@ -128,8 +128,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             size=L1_SRAM_BASE_SIZE * L1_I_SIZE_MULTIPLIER,
             r_bw=32 * L1_I_BW_MULTIPLIER,
             w_bw=32 * L1_I_BW_MULTIPLIER,
-            r_cost=5.9 * L1_I_BW_MULTIPLIER,
-            w_cost=5.9 * L1_I_BW_MULTIPLIER,
+            r_cost=SRAM_ENERGY_32b * L1_I_BW_MULTIPLIER,
+            w_cost=SRAM_ENERGY_32b * L1_I_BW_MULTIPLIER,
             area=0,
             r_port=0,
             w_port=0,
@@ -145,8 +145,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
             size=L1_SRAM_BASE_SIZE * L1_O_SIZE_MULTIPLIER,
             r_bw=32 * L1_O_BW_MULTIPLIER,
             w_bw=32 * L1_O_BW_MULTIPLIER,
-            r_cost=5.9 * L1_O_BW_MULTIPLIER,
-            w_cost=5.9 * L1_O_BW_MULTIPLIER,
+            r_cost=SRAM_ENERGY_32b * L1_O_BW_MULTIPLIER,
+            w_cost=SRAM_ENERGY_32b * L1_O_BW_MULTIPLIER,
             area=0,
             r_port=0,
             w_port=0,
@@ -301,7 +301,7 @@ def multiplier_array_dut():
     multiplier_input_precision = [8, 8]
     multiplier_energy = 0.012 # scaled from isscc14 horowitz
     multiplier_area = 1
-    dimensions = {"D1": 32, "D2": 32}  # {'D1': ('K', 32), 'D2': ('C', 32)}
+    dimensions = {"D1": 64, "D2": 14}  # {'D1': ('K', 32), 'D2': ('C', 32)}
 
     multiplier = Multiplier(
         multiplier_input_precision, multiplier_energy, multiplier_area

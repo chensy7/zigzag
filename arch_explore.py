@@ -5,7 +5,7 @@ import os
 import numpy as np
 import pickle
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.inputs.examples.hardware.Template_2L import cores_dut
+from zigzag.inputs.examples.hardware.Template_2L_adjusted import cores_dut
 
 import argparse
 
@@ -25,13 +25,17 @@ parser.add_argument('--num_cpu', default=1, type=int)
 args = parser.parse_args()
 
 if not args.parse_output:
-    shutil.rmtree('summary'); os.mkdir("summary")
-    shutil.rmtree('outputs'); os.mkdir("outputs")
+    shutil.rmtree('summary', ignore_errors=True); os.mkdir("summary")
+    shutil.rmtree('outputs', ignore_errors=True); os.mkdir("outputs")
 
-opt = 'EDP'
+opt = 'latency'
 model = args.model
-onnx_model_path = f"zigzag/inputs/examples/workload/{model}.onnx"
-workload = onnx_model_path
+if ".py" in model:
+    model = model.split(".")[0]
+    workload = f"zigzag.inputs.examples.workload.{model}"
+else:
+    onnx_model_path = f"zigzag/inputs/examples/workload/{model}.onnx"
+    workload = onnx_model_path
 precision = f"zigzag/inputs/examples/workload/{model}.json"
 
 energies_all = {}
@@ -41,8 +45,8 @@ latency_dict = {}
 
 # architecture exploration
 # getting search space for SRAM
-total_sram_budget = 16* 1024**2  # 2MB
-l1_sram_base_size = 8192 * 8 *16 # 32KB
+total_sram_budget = 2 * 8* 1024**2  # 2MB
+l1_sram_base_size = 8192 * 8 *4 # 32KB
 max_l1_sram_size_multiplier = total_sram_budget // l1_sram_base_size
 l1_size_multiplier_choices = np.append(np.flip(2**np.arange(np.log(max_l1_sram_size_multiplier)//np.log(2)+1)), 0)
 l1_size_multipliers = []
@@ -69,8 +73,8 @@ for (l1_w_s, l1_i_s, l1_o_s) in l1_size_multipliers:
 # getting search space for regfile
 dimensions_mac = (32, 32)
 total_regfile_budget = 16 * 1024
-regfile_base_size_i_w = 8
-regfile_base_size_o = 16
+regfile_base_size_i_w = 256
+regfile_base_size_o = 256
 max_regfile_o_size_multiplier = total_regfile_budget // regfile_base_size_o // min(dimensions_mac)
 max_regfile_i_w_size_multiplier = total_regfile_budget // regfile_base_size_i_w // min(dimensions_mac)
 reg_size_multiplier_choices_o = np.append(np.flip(2**np.arange(np.log(max_regfile_o_size_multiplier)//np.log(2)+1)), 0)
@@ -118,9 +122,11 @@ for idx, (o_s, _, i_s, _, w_s, _) in enumerate(reg_size_multipliers):
 
 all_exploration_dicts = []
 idx = 0
-# l1_multipliers = [(8, 4, 4, 64, 2, 4)] #[l1_multipliers[93]]
-# l1_multipliers = [l1_multipliers[196]]
-reg_multipliers = [(1, (0, 0), 1, (0, 0), 1, (0, 0), 1, 1, 1)] 
+# l1_w_s, l1_i_s, l1_o_s, l1_w_bw, l1_i_bw, l1_o_bw
+l1_multipliers = [(8, 4.25, 10.5, 16, 4.25, 10.5)] #[l1_multipliers[93]]
+# l1_multipliers = [l1_multipliers[1951]]
+reg_multipliers = [(1, (0, 0, 0), 1, (0, 0, 0), 1, (0, 0, 0), 1, 1, 1)] 
+print(len(l1_multipliers)*len(reg_multipliers))
 for reg in reg_multipliers:
     for l1 in l1_multipliers:
         memory_hierarchy_exploration_dict = {}
@@ -144,7 +150,7 @@ for reg in reg_multipliers:
         idx += 1
         all_exploration_dicts += [memory_hierarchy_exploration_dict]
         
-hwarch = 'Template_2L'
+hwarch = 'Template_2L_adjusted'
 mapping = f"zigzag.inputs.examples.mapping.default"
 accelerator = f"zigzag.inputs.examples.hardware.{hwarch}"
 
@@ -156,7 +162,7 @@ def evaluate_single_mem_config(mem_dict):
     dump_filename_pattern=f"outputs/{hwarch}-mem{mem_dict['idx']}-{model}-layer_?.json"
     pickle_filename = f"outputs/{hwarch}-mem{mem_dict['idx']}-{model}-saved_list_of_cmes.pickle"
 
-    energy, latency, cme = get_hardware_performance_zigzag_without_unused_memory(workload=workload,
+    energy, latency, cme = get_hardware_performance_zigzag(workload=workload,
                                                            precision=precision,
                                                            accelerator=accelerator,
                                                            mapping=mapping,
@@ -180,6 +186,7 @@ def evaluate_single_mem_config(mem_dict):
     for cme in cme_for_all_layers:
         total += cme.latency_total2
         util += cme.latency_total2 * cme.MAC_utilization2
+        # print(cme.layer, cme.spatial_mapping['O'])
     #     print(cme.MAC_utilization2, cme.energy_total, cme.latency_total2)
     # print(util/total)
 
@@ -208,15 +215,15 @@ latency_by_layer = []
 util_by_layer = []
 for mem_dict in all_exploration_dicts:
     pickle_filename = f"summary/{hwarch}-mem{mem_dict['idx']}-{model}.pickle"
-    # try:
-    with open(pickle_filename, 'rb') as handle:
-        output_dict = pickle.load(handle)
-    # except:
-    #     print("Error", pickle_filename)
-    #     energy_by_layer += [[1e30 for i in range(len(output_dict["energy_by_layer"]))]]
-    #     latency_by_layer += [[1e30 for i in range(len(output_dict["energy_by_layer"]))]]
-    #     edp_by_layer += [[1e30 for i in range(len(output_dict["energy_by_layer"]))]]
-    #     continue
+    try:
+        with open(pickle_filename, 'rb') as handle:
+            output_dict = pickle.load(handle)
+    except:
+        print("Error", pickle_filename)
+        # energy_by_layer += [[1e30 for i in range(len(output_dict["energy_by_layer"]))]]
+        # latency_by_layer += [[1e30 for i in range(len(output_dict["energy_by_layer"]))]]
+        # edp_by_layer += [[1e30 for i in range(len(output_dict["energy_by_layer"]))]]
+        continue
     energy = output_dict['energy']
     latency = output_dict['latency']
     edp = energy * latency

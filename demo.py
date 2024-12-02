@@ -2,10 +2,11 @@ from zigzag.api import get_hardware_performance_zigzag
 from zigzag.classes.io.accelerator.parser import AcceleratorParser
 import os
 
-opt = 'EDP'
-model = "alexnet"
+opt = 'latency'
+model = "covdecoder"
 onnx_model_path = f"zigzag/inputs/examples/workload/{model}.onnx"
-workload = onnx_model_path
+py_model_path = f"zigzag.inputs.examples.workload.{model}"
+workload = py_model_path
 precision = f"zigzag/inputs/examples/workload/{model}.json"
 
 energies_all = {}
@@ -14,8 +15,8 @@ energy_dict = {}
 latency_dict = {}
 
 # for hwarch in ["Edge_TPU", "Tesla_NPU", "Meta_prototype", "TPU", "Ascend"]:
-for hwarch in ["Edge_TPU_like"]:
-    mapping = f"zigzag.inputs.examples.mapping.default"
+for hwarch in ["Tesla_NPU_like"]:
+    mapping = f"zigzag.inputs.examples.mapping.Tesla_NPU_like"
     accelerator = f"zigzag.inputs.examples.hardware.{hwarch}"
 
     dump_filename_pattern=f"outputs/{hwarch}-{model}-layer_?.json"

@@ -73,9 +73,9 @@ class ONNXModelParser:
 
         workload = self.parse_workload_from_onnx_model_and_mapping()
         self.workload = workload
-        for i in workload:
-            if isinstance(i, LayerNode):
-                i.operand_precision = self.precision[str(i)]
+        # for i in workload:
+        #     if isinstance(i, LayerNode):
+        #         i.operand_precision = self.precision[str(i)]
 
     def parse_precision_from_path(self, path):
         f = open(path)
