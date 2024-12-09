@@ -81,8 +81,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
         L1_W = MemoryInstance(
             name="L1_W",
             size=4096*512*4,
-            r_bw=512*16,
-            w_bw=512*16,
+            r_bw=6144,
+            w_bw=6144,
             r_cost=26.5631e-6*500*4*0.9*2e-9*1e12,
             w_cost=30.1536e-6*500*4*0.9*2e-9*1e12,
             area=0,
@@ -98,8 +98,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
         L1_I = MemoryInstance(
             name="L1_I",
             size=8192 * 136*4,
-            r_bw=136*16,
-            w_bw=136*16,
+            r_bw=5504,
+            w_bw=5504,
             r_cost=38.5400e-6*500*1*0.9*2e-9*1e12,
             w_cost=46.0806e-6*500*1*0.9*2e-9*1e12,
             area=0,
@@ -115,8 +115,8 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
         L1_O = MemoryInstance(
             name="L1_O",
             size=8192*336*4,
-            r_bw=336*16,
-            w_bw=336*16,
+            r_bw=10240,
+            w_bw=10240,
             r_cost=32.1994e-6*500*3*0.9*2e-9*1e12, # tsmc28 memory compiler for 2048x32
             w_cost=38.3185e-6*500*3*0.9*2e-9*1e12,
             area=0,
@@ -149,10 +149,10 @@ def memory_hierarchy_dut(multiplier_array, memory_hierarchy_exploration_dict, vi
     dram = MemoryInstance(
         name="dram",
         size=10000000000,
-        r_bw=128*2,
-        w_bw=128*2,
-        r_cost=1280, #assume 10 pJ/bit
-        w_cost=1280,
+        r_bw=64*2,
+        w_bw=64*2,
+        r_cost=640*2, #assume 10 pJ/bit
+        w_cost=640*2,
         area=0,
         r_port=0,
         w_port=0,
@@ -273,7 +273,7 @@ def multiplier_array_dut():
     multiplier_input_precision = [8, 8]
     multiplier_energy = 0.477 # 174e-3*(158737*2e-9)/115605504*1e12
     multiplier_area = 1
-    dimensions = {"D1": 64, "D2": 32, "D3": 4}  # {'D1': ('K', 32), 'D2': ('C', 32)}
+    dimensions = {"D1": 16, "D2": 16, "D3": 3, "D4": 40}  # {'D1': ('K', 32), 'D2': ('C', 32)}
 
     multiplier = Multiplier(
         multiplier_input_precision, multiplier_energy, multiplier_area

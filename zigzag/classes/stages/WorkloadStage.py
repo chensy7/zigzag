@@ -12,9 +12,10 @@ class WorkloadStage(Stage):
 
     ## The class constructor
     # Initialization of self.workload.
-    def __init__(self, list_of_callables, *, workload, **kwargs):
+    def __init__(self, list_of_callables, *, workload, quiet, **kwargs):
         super().__init__(list_of_callables, **kwargs)
         self.workload = workload
+        self.quiet = quiet
 
     def run(self):
         for id, layer in enumerate(nx.topological_sort(self.workload)):

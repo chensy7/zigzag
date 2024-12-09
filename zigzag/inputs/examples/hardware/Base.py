@@ -49,8 +49,8 @@ def memory_hierarchy_dut(multiplier_array, mem_hier, visualize=False):
             size=mem_hier["rf_O_size"],
             r_bw=mem_hier["rf_O_bw"],
             w_bw=mem_hier["rf_O_bw"],
-            r_cost=0,
-            w_cost=0,
+            r_cost=0.00087790554*24,
+            w_cost=0.00087790554*24,
             area=0,
             r_port=1,
             w_port=1,
@@ -59,7 +59,7 @@ def memory_hierarchy_dut(multiplier_array, mem_hier, visualize=False):
         )
 
     ##################################### on-chip memory hierarchy building blocks #####################################
-    SRAM_ENERGY_32b = 5.9
+    SRAM_ENERGY_32b = 5.9*2
     if mem_hier["l1_W_size"] != 0:
         L1_W = MemoryInstance(
             name="L1_W",
@@ -118,8 +118,8 @@ def memory_hierarchy_dut(multiplier_array, mem_hier, visualize=False):
         size=10000000000,
         r_bw=128,
         w_bw=128,
-        r_cost=1280, #assume 10 pJ/bit
-        w_cost=1280,
+        r_cost=128*20, #assume 10 pJ/bit
+        w_cost=128*20,
         area=0,
         r_port=0,
         w_port=0,
@@ -213,7 +213,7 @@ def memory_hierarchy_dut(multiplier_array, mem_hier, visualize=False):
 def multiplier_array_dut(mul_dims):
     """Multiplier array variables"""
     multiplier_input_precision = [8, 8]
-    multiplier_energy = 0.012 # scaled from isscc14 horowitz
+    multiplier_energy = 0.477 # scaled from isscc14 horowitz
     multiplier_area = 1
 
     multiplier = Multiplier(

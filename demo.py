@@ -3,7 +3,7 @@ from zigzag.classes.io.accelerator.parser import AcceleratorParser
 import os
 
 opt = 'latency'
-model = "covdecoder"
+model = "mvs_gi"
 onnx_model_path = f"zigzag/inputs/examples/workload/{model}.onnx"
 py_model_path = f"zigzag.inputs.examples.workload.{model}"
 workload = py_model_path

@@ -24,9 +24,14 @@ parser.add_argument('--model')
 parser.add_argument('--num_cpu', default=1, type=int)
 args = parser.parse_args()
 
+from datetime import datetime
+now = datetime.now()
+timestamp_str = now.strftime("%Y-%m-%d-%H-%M-%S")
+summary_folder = f"summary-{timestamp_str}"
+outputs_folder = f"outputs-{timestamp_str}"
 if not args.parse_output:
-    shutil.rmtree('summary', ignore_errors=True); os.mkdir("summary")
-    shutil.rmtree('outputs', ignore_errors=True); os.mkdir("outputs")
+    os.mkdir(summary_folder)
+    os.mkdir(outputs_folder)
 
 opt = 'latency'
 model = args.model
@@ -125,7 +130,7 @@ idx = 0
 # l1_w_s, l1_i_s, l1_o_s, l1_w_bw, l1_i_bw, l1_o_bw
 l1_multipliers = [(8, 4.25, 10.5, 16, 4.25, 10.5)] #[l1_multipliers[93]]
 # l1_multipliers = [l1_multipliers[1951]]
-reg_multipliers = [(1, (0, 0, 0), 1, (0, 0, 0), 1, (0, 0, 0), 1, 1, 1)] 
+reg_multipliers = [(1, (0, 0, 0, 0), 1, (0, 0, 0, 0), 1, (0, 0, 0, 0), 1, 1, 1)] 
 print(len(l1_multipliers)*len(reg_multipliers))
 for reg in reg_multipliers:
     for l1 in l1_multipliers:
@@ -159,8 +164,10 @@ def evaluate_single_mem_config(mem_dict):
     acc_name = os.path.basename(__file__)[:-3]
     accelerator = Accelerator(acc_name, cores)
 
-    dump_filename_pattern=f"outputs/{hwarch}-mem{mem_dict['idx']}-{model}-layer_?.json"
-    pickle_filename = f"outputs/{hwarch}-mem{mem_dict['idx']}-{model}-saved_list_of_cmes.pickle"
+    dump_filename_pattern=f"{outputs_folder}/{hwarch}-mem{mem_dict['idx']}-{model}-layer_?.json"
+    pickle_filename = f"{outputs_folder}/{hwarch}-mem{mem_dict['idx']}-{model}-saved_list_of_cmes.pickle"
+
+    precision = {"W": 8, "I": 8, "O": 16, "O_final": 8}
 
     energy, latency, cme = get_hardware_performance_zigzag(workload=workload,
                                                            precision=precision,
@@ -186,15 +193,13 @@ def evaluate_single_mem_config(mem_dict):
     for cme in cme_for_all_layers:
         total += cme.latency_total2
         util += cme.latency_total2 * cme.MAC_utilization2
-        # print(cme.layer, cme.spatial_mapping['O'])
-    #     print(cme.MAC_utilization2, cme.energy_total, cme.latency_total2)
-    # print(util/total)
+        print(cme.MAC_utilization2, cme.energy_total, cme.latency_total2)
 
     output_dict["energy_by_layer"] = [cme.energy_total for cme in cme_for_all_layers]
     output_dict["latency_by_layer"] = [cme.latency_total2 for cme in cme_for_all_layers]
     output_dict["utilization_by_layer"] = [cme.MAC_utilization2 for cme in cme_for_all_layers]
 
-    pickle_filename = f"summary/{hwarch}-mem{mem_dict['idx']}-{model}.pickle"
+    pickle_filename = f"{summary_folder}/{hwarch}-mem{mem_dict['idx']}-{model}.pickle"
     with open(pickle_filename, 'wb') as handle:
         pickle.dump(output_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -214,7 +219,7 @@ energy_by_layer = []
 latency_by_layer = []
 util_by_layer = []
 for mem_dict in all_exploration_dicts:
-    pickle_filename = f"summary/{hwarch}-mem{mem_dict['idx']}-{model}.pickle"
+    pickle_filename = f"{summary_folder}/{hwarch}-mem{mem_dict['idx']}-{model}.pickle"
     try:
         with open(pickle_filename, 'rb') as handle:
             output_dict = pickle.load(handle)

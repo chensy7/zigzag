@@ -40,6 +40,7 @@ class LomaStage(Stage):
             spatial_mapping=self.spatial_mapping,
             **self.kwargs
         )
+        self.engine.show_progress_bar = False
 
         for tm in self.engine.run():
 

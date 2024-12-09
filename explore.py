@@ -12,8 +12,12 @@ import argparse
 import shutil
 import os
 
+from paretoset import paretoset
+import pandas as pd
+import matplotlib.pyplot as plt
+
 parser = argparse.ArgumentParser(description="architecture exploration")
-parser.add_argument('--parse_output', action="store_true")
+parser.add_argument('--parse_output', default=None)
 parser.add_argument('--model')
 parser.add_argument('--num_cpu', default=1, type=int)
 args = parser.parse_args()
@@ -38,11 +42,14 @@ energy_dict = {}
 latency_dict = {}
 
 ## define DoFs
-macs = {"D1": [16, 24, 32], "D2": [4, 8, 12], "D3": [4, 8, 12]}
+macs = {"D1": [32, 48, 64], "D2": [8, 16, 24], "D3": [8, 16, 24]}
 rf_size = {"I": [8], "W": [8], "O": [16]}
 rf_dims = {"I": (1, 0, 0), "W": (0, 0, 1), "O": (0, 1, 0)} # spatial mapping fixed, K, C, OX
 # rf_dims = {"I": (1, 0, 0), "W": (0, 1, 1), "O": (0, 0, 0)} # spatial mapping fixed, K, OX, OY
-l1_size = {"I": [0, 2**18, 2*2**18, 4*2**18, 6*2**18, 8*2**18], "W": [0, 2**18, 2*2**18, 4*2**18, 6*2**18, 8*2**18], "O": [0, 2**18, 2*2**18, 4*2**18, 6*2**18, 8*2**18]}
+mem_size_options = []
+for i in range(4, 16, 2):
+    mem_size_options += [i*2**18]
+l1_size = {"I": mem_size_options, "W": mem_size_options, "O": mem_size_options}
 
 all_exploration_dicts = []
 idx = 0
@@ -81,7 +88,7 @@ for d1 in macs["D1"]:
                                     }
                                     all_exploration_dicts += [{"idx": idx, "mac": configs_mac, "mem": mem_hier, "mapping": mapping}]
                                     idx += 1
-        
+
 hwarch = 'Base'
 # mapping = f"zigzag.inputs.examples.mapping.default"
 accelerator = f"zigzag.inputs.examples.hardware.{hwarch}"
@@ -91,10 +98,11 @@ def evaluate_single_mem_config(exploration_dict):
     acc_name = os.path.basename(__file__)[:-3]
     accelerator = Accelerator(acc_name, cores)
 
-    dump_filename_pattern=f"outputs/{hwarch}-cfg{exploration_dict['idx']}-{model}-layer_?.json"
-    pickle_filename = f"outputs/{hwarch}-cfg{exploration_dict['idx']}-{model}-saved_list_of_cmes.pickle"
+    os.makedirs(f"outputs/cfg{exploration_dict['idx']}", exist_ok=True)
+    dump_filename_pattern=f"outputs/cfg{exploration_dict['idx']}/{hwarch}-{model}-layer_?.json"
+    pickle_filename = f"outputs/cfg{exploration_dict['idx']}/{hwarch}-{model}-saved_list_of_cmes.pickle"
 
-    energy, latency, cme = get_hardware_performance_zigzag_without_unused_memory(workload=workload,
+    energy, latency, cme = get_hardware_performance_zigzag(workload=workload,
                                                            precision=precision,
                                                            accelerator=accelerator,
                                                            mapping=exploration_dict["mapping"],
@@ -141,14 +149,19 @@ def get_area(cfg):
     macs, mem = get_mac_mem(cfg)
     return 367033/1e6*macs/256 + (681300-367033)/1e6, mem/2**22
 
+plt.figure(figsize=(12, 12))
+# plt.yscale('log')
 area = []
 lat = []
 energy = []
 edp = []
 annot = []
 util = 0
+summary_folder = f"summary"
+# if args.parse_output:
+#     summary_folder = args.parse_output
 for exploration_dict in all_exploration_dicts:
-    pickle_filename = f"summary/{hwarch}-cfg{exploration_dict['idx']}-{model}.pickle"
+    pickle_filename = f"{summary_folder}/{hwarch}-cfg{exploration_dict['idx']}-{model}.pickle"
     with open(pickle_filename, 'rb') as handle:
         output_dict = pickle.load(handle)
     latency = output_dict['latency']
@@ -159,26 +172,23 @@ for exploration_dict in all_exploration_dicts:
     energy += [e]
     edp += [latency*e]
     annot += [exploration_dict['idx']]
-import matplotlib.pyplot as plt
+    plt.annotate(exploration_dict['idx'], (logic+mem, latency*e))
+    print(logic+mem, latency)
+plt.scatter(area, edp)
 
+# arch = pd.DataFrame({"area": area,
+#                     "edp": edp})
+# mask = paretoset(arch, sense=["min", "min"])
+# pareto = arch[mask]
 
-plt.figure(figsize=(12, 12))
-plt.scatter(area, lat)
+# pareto_area = pareto.area.tolist()
+# pareto_edp = pareto.edp.tolist()
+# pareto_index = pareto.index.tolist()
 
-from paretoset import paretoset
-import pandas as pd
-arch = pd.DataFrame({"area": area, 
-                       "edp": edp})
-mask = paretoset(arch, sense=["min", "min"])
-paretoset = arch[mask]
+# for idx in pareto_index:
+#     exploration_dict = all_exploration_dicts[idx]
+#     print(idx, get_mac_mem(exploration_dict), lat[idx], area[idx], energy[idx])
 
-# pareto_area = paretoset.area.tolist()
-# pareto_lat = paretoset.latency.tolist()
-pareto_index = paretoset.index.tolist()
-
-for idx in pareto_index:
-    exploration_dict = all_exploration_dicts[idx]
-    print(idx, get_mac_mem(exploration_dict), lat[idx], area[idx], energy[idx])
-
-plt.scatter(pareto_area, pareto_lat)
-plt.savefig(f"{model}.pdf")
+# plt.scatter(pareto_area, pareto_edp)
+plt.savefig(f"{model}-summary.pdf")
+plt.show()

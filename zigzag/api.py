@@ -10,6 +10,7 @@ def get_hardware_performance_zigzag(
     opt="latency",
     dump_filename_pattern="outputs/{datetime}.json",
     pickle_filename="outputs/list_of_cmes.pickle",
+    quiet=False,
 ):
     # Initialize the logger
     import logging as _logging
@@ -69,6 +70,7 @@ def get_hardware_performance_zigzag(
         # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long as it is needed).
         # By default, if the parameter is not defined, it will be set as False internally.
         access_same_data_considered_as_no_access=True,
+        quiet=quiet,
     )
 
     # Launch the MainStage
